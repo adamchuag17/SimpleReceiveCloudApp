@@ -18,7 +18,7 @@ st.title("📦 SimpleReceiveApp (雲端版)")
 st.write("記錄包裹收發、簽收時間、住戶資訊，自動產生流水號。")
 
 # 表單輸入區
-with st.form("receive_form", clear_on_submit=True):
+with st.form("receive_form_v2", clear_on_submit=True):
     receiver = st.text_input("✍️ 收貨人")
     courier = st.selectbox("🚚 貨運公司", ["黑貓", "宅配通", "郵局", "其他"])
     quantity = st.number_input("📦 件數", min_value=1, step=1)
