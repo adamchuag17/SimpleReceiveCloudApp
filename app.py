@@ -1,3 +1,48 @@
+import streamlit as st
+from datetime import datetime
+import pytz
+import pandas as pd
+
+# 設定台灣時間
+tz = pytz.timezone("Asia/Taipei")
+now = datetime.now(tz)
+st.write("🕒 現在台灣時間：", now.strftime("%Y-%m-%d %H:%M:%S"))
+
+st.set_page_config(page_title="SimpleReceiveApp 雲端版", layout="centered")
+
+# 初始化 session_state 紀錄區
+if "records" not in st.session_state:
+    st.session_state.records = []
+
+st.title("📦 SimpleReceiveApp (雲端版)")
+st.write("記錄包裹收發、簽收時間、住戶資訊，自動產生流水號。")
+
+# 表單輸入區
+with st.form("receive_form", clear_on_submit=True):
+    receiver = st.text_input("✍️ 收貨人")
+    courier = st.selectbox("🚚 貨運公司", ["黑貓", "宅配通", "郵局", "其他"])
+    quantity = st.number_input("📦 件數", min_value=1, step=1)
+    location = st.text_input("📍 擺放位置")
+
+    submitted = st.form_submit_button("✅ 簽收並儲存")
+    if submitted:
+        timestamp = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
+        record = {
+            "簽收時間": timestamp,
+            "收貨人": receiver,
+            "貨運公司": courier,
+            "件數": quantity,
+            "位置": location
+        }
+        st.session_state.records.append(record)
+        st.success("✅ 已儲存簽收紀錄！")
+
+# 顯示簽收紀錄表格
+if st.session_state.records:
+    df = pd.DataFrame(st.session_state.records)
+    st.subheader("📋 歷史簽收紀錄")
+    st.dataframe(df, use_container_width=True)
+
 from datetime import datetime
 import pytz
 import streamlit as st
