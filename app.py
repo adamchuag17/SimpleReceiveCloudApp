@@ -1,7 +1,11 @@
-
+from datetime import datetime
+import pytz
 import streamlit as st
 import pandas as pd
-from datetime import datetime
+# 顯示台灣時間
+tz = pytz.timezone("Asia/Taipei")
+now = datetime.now(tz)
+st.write("📅 現在台灣時間：", now.strftime("%Y-%m-%d %H:%M:%S"))
 
 st.set_page_config(page_title="SimpleReceiveApp 雲端版", layout="centered")
 
