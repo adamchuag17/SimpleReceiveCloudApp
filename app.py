@@ -55,7 +55,7 @@ if st.session_state.records:
     st.dataframe(df)
 
 # 表單輸入區
-with st.form("receive_form_v2", clear_on_submit=True):
+with st.form("receive_form_v3", clear_on_submit=True):
     receiver = st.text_input("✍️ 收貨人")
     courier = st.selectbox("🚚 貨運公司", ["黑貓", "宅配通", "郵局", "其他"])
     quantity = st.number_input("📦 件數", min_value=1, step=1)
