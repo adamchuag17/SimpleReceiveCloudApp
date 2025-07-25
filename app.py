@@ -16,6 +16,43 @@ if "records" not in st.session_state:
 
 st.title("📦 SimpleReceiveApp (雲端版)")
 st.write("記錄包裹收發、簽收時間、住戶資訊，自動產生流水號。")
+# -- 顯示台灣時間 --
+tz = pytz.timezone("Asia/Taipei")
+now = datetime.now(tz)
+st.write("🕓 現在台灣時間：", now.strftime("%Y-%m-%d %H:%M:%S"))
+
+st.title("📦 SimpleReceiveApp（雲端版）")
+st.write("記錄包裹收發、簽收時間、住戶資訊，自動產生流水號。")
+
+# -- 表單輸入區 --
+with st.form("receive_form_v2", clear_on_submit=True):
+    receiver = st.text_input("📮 收貨人")
+    courier = st.selectbox("🚛 貨運公司", ["黑貓", "宅配通", "郵局", "其他"])
+    quantity = st.number_input("📦 件數", min_value=1, step=1)
+    location = st.text_input("📍 擺放位置")
+    signature = st.text_input("✍️ 簽名或備註（如：收件人姓名、簽名地點）")
+
+    submitted = st.form_submit_button("✅ 簽收並儲存")
+
+    if submitted:
+        timestamp = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
+        record = {
+            "簽收時間": timestamp,
+            "收貨人": receiver,
+            "貨運公司": courier,
+            "件數": quantity,
+            "位置": location,
+            "簽名": signature,
+            "已領取": "否"
+        }
+        st.session_state.records.append(record)
+        st.success("✅ 已成功記錄！")
+
+# -- 顯示所有紀錄 --
+if st.session_state.records:
+    df = pd.DataFrame(st.session_state.records)
+    st.subheader("📋 收件紀錄")
+    st.dataframe(df)
 
 # 表單輸入區
 with st.form("receive_form_v2", clear_on_submit=True):
